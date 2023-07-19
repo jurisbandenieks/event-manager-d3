@@ -53,7 +53,8 @@ export const Chart: React.FC<Props> = ({ data }) => {
       .attr('transform', `translate(${margin.left}, 0)`)
       .call(yAxis)
 
-    svg
+    // Select all event rectangles
+    const eventRects = svg
       .selectAll(`.${styles.eventRect}`)
       .data(
         resourcesByEventTypes.flatMap((resource) => {
@@ -64,7 +65,7 @@ export const Chart: React.FC<Props> = ({ data }) => {
       .append('rect')
       .attr('class', styles.eventRect)
       .attr('x', (d) => xScale(d.event.start))
-      .attr('y', (d) => yScale(d.resource.id) || 0)
+      .attr('y', 0) // Start at the top initially
       .attr(
         'width',
         (d) => xScale(d.event.end || d.event.start) - xScale(d.event.start),
@@ -73,6 +74,12 @@ export const Chart: React.FC<Props> = ({ data }) => {
       .style('fill', (d) => d.event.color || 'steelblue')
       .on('mouseenter', handleMouseEnter)
       .on('mouseleave', handleMouseOut)
+
+    eventRects
+      .transition()
+      .duration(200) // Set the duration of the animation
+      .delay((d, i) => i * 5) // Add a delay for staggered animation
+      .attr('y', (d) => yScale(d.resource.id) || 0)
 
     function handleMouseEnter(d: any) {
       d3.select(d.currentTarget).style(
