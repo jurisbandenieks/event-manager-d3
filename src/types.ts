@@ -38,15 +38,13 @@ export type Page = {
 }
 
 export type Props = {
-  resources: Resource[]
-  tableId: ID
-  hasWeekends?: boolean // default false
+  data: Resource[]
   flat?: boolean // default false
   showLegend?: boolean // default false
   showTooltip?: boolean // default false
   loading?: boolean // default false
   search?: ReactElement<HTMLInputElement>
   pagination?: ReactElement<HTMLDivElement>
-  onClick: (data: ClickData | undefined) => void
+  onClick: (data: ClickData) => void
   onUpdateDate: (date: MonthYear) => void
 }

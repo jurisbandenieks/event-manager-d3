@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import { ClickData, Event, Resource } from '../..'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 import { useResourcesByEventTypes } from '../../hooks'
 
 type Props = {
   data: Resource[]
+  showTooltip: boolean
 }
 
-export const Chart: React.FC<Props> = ({ data }) => {
+export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
   const chartRef = useRef<SVGSVGElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
 
@@ -86,24 +87,27 @@ export const Chart: React.FC<Props> = ({ data }) => {
         'box-shadow',
         '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
       )
+      if (showTooltip) {
+        const tooltip = d3.select(tooltipRef.current)
+        const data = d.target.__data__ as ClickData
+        const resource = data.resource
+        const event = data.event as Event
 
-      const tooltip = d3.select(tooltipRef.current)
-      const data = d.target.__data__ as ClickData
-      const resource = data.resource
-      const event = data.event as Event
+        if (event) {
+          const tooltipContent = `
+              <strong>${resource?.label ?? ''}</strong><br>
+              ${event.title}<br>
+              ${formatDate(event.start)} - ${formatDate(
+            event.end || event.start,
+          )}
+            `
 
-      if (event) {
-        const tooltipContent = `
-          <strong>${resource?.label ?? ''}</strong><br>
-          ${event.title}<br>
-          ${formatDate(event.start)} - ${formatDate(event.end || event.start)}
-        `
-
-        tooltip
-          .html(tooltipContent)
-          .style('left', `${d.pageX - 8}px`)
-          .style('top', `${d.pageY + 8}px`)
-          .style('opacity', 0.9)
+          tooltip
+            .html(tooltipContent)
+            .style('left', `${d.pageX - 8}px`)
+            .style('top', `${d.pageY + 8}px`)
+            .style('opacity', 0.9)
+        }
       }
     }
 
