@@ -1,0 +1,14 @@
+.eventRect {
+  box-shadow: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 8px;
+  font-size: 12px;
+}
