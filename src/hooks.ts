@@ -23,7 +23,7 @@ export const useResourcesByEventTypes = (resources: Resource[]): Resource[] => {
 
       let suffix = 1
       for (const type in eventsByType) {
-        const uniqueId = `${resource.id}-${suffix}` // Generate a unique identifier
+        const uniqueId = `${resource.id}-${type}` // Generate a unique identifier
         mappedEvents.push({
           id: uniqueId,
           title: suffix === 1 ? resource.title : '',

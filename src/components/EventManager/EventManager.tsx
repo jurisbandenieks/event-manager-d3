@@ -4,6 +4,7 @@ import styles from './styles.module.scss'
 import { Chart } from '../Chart'
 import { Legend } from '../Legend'
 import { Actions } from '../Actions'
+import { useResourcesByEventTypes } from '../../hooks'
 
 export const EventManager: React.FC<Props> = ({
   data,
@@ -15,6 +16,8 @@ export const EventManager: React.FC<Props> = ({
   onUpdateDate,
 }) => {
   const [monthYear, setMonthYear] = useState(getYearAndMonth())
+
+  const resourcesByEventTypes = useResourcesByEventTypes(data)
 
   const updateDate = (date: MonthYear) => {
     setMonthYear(date)
@@ -30,7 +33,7 @@ export const EventManager: React.FC<Props> = ({
       </div>
 
       <Chart
-        data={data}
+        data={resourcesByEventTypes}
         showTooltip={showTooltip}
         monthYear={monthYear}
         onClick={onClick}

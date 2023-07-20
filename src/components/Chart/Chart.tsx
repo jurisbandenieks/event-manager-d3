@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import * as d3 from 'd3'
-import { ClickData, Event, MonthYear, Resource } from '../..'
+import { select, scaleTime, scaleBand, axisBottom, axisLeft } from 'd3'
+import { ClickData, Event, MonthYear, Resource, getDayMonth } from '../..'
 import styles from './styles.module.scss'
-import { useResourcesByEventTypes } from '../../hooks'
 
 type Props = {
   data: Resource[]
@@ -20,9 +19,8 @@ export const Chart: React.FC<Props> = ({
   const chartRef = useRef<SVGSVGElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
 
-  const resourcesByEventTypes = useResourcesByEventTypes(data)
-
   useEffect(() => {
+    console.log(data)
     const firstDay = new Date(monthYear.year, monthYear.month - 1, 1)
     const lastDay = new Date(monthYear.year, monthYear.month, 0)
 
@@ -30,44 +28,50 @@ export const Chart: React.FC<Props> = ({
     const height = 400
     const margin = { top: 10, right: 100, bottom: 30, left: 100 }
 
-    const svg = d3
-      .select(chartRef.current)
+    select(chartRef.current).selectAll('g.axis').remove()
+
+    // Canvas
+    const svg = select(chartRef.current)
       .attr('width', width)
       .attr('height', height)
 
-    const xScale = d3
-      .scaleTime()
+    // X axis
+    const xScale = scaleTime()
       .domain([firstDay, lastDay]) // Customize the date range
       .range([margin.left, width - margin.right])
 
-    const yScale = d3
-      .scaleBand()
-      .domain(resourcesByEventTypes.map((resource) => resource.id))
-      .range([height - margin.bottom, margin.top])
-      .padding(0.2)
-
-    const xAxis = d3.axisBottom(xScale)
+    const xAxis = axisBottom(xScale).tickSize(0).ticks(31)
 
     svg
       .append('g')
+      .attr('class', 'axis')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
       .call(xAxis)
 
-    const yAxis = d3
-      .axisLeft(yScale)
+    // Y axis
+    const yScale = scaleBand()
+      .domain(data.map((resource) => resource.id))
+      .range([height - margin.bottom, margin.top])
+      .padding(0.4)
+
+    const yAxis = axisLeft(yScale)
       .tickFormat(
         (resourceId) =>
-          resourcesByEventTypes.find((resource) => resource.id === resourceId)
-            ?.title ?? resourceId,
+          data.find((resource) => resource.id === resourceId)?.title ??
+          resourceId,
       )
+      .tickSize(0)
+
     svg
       .append('g')
+      .attr('class', 'axis')
       .attr('transform', `translate(${margin.left}, 0)`)
+
       .call(yAxis)
 
     // Select all event rectangles
     const eventRects = svg.selectAll(`.${styles.eventRect}`).data(
-      resourcesByEventTypes.flatMap((resource) => {
+      data.flatMap((resource) => {
         return resource.events.map((event) => ({ resource, event }))
       }),
     )
@@ -75,6 +79,22 @@ export const Chart: React.FC<Props> = ({
     // Remove the old event rectangles that are no longer needed
     eventRects.exit().remove()
 
+    // Update rects
+    eventRects
+      .attr('class', styles.eventRect)
+      .attr('x', (d) => xScale(d.event.start))
+      .attr('y', (d) => yScale(d.resource.id) || 0)
+      .attr(
+        'width',
+        (d) => xScale(d.event.end || d.event.start) - xScale(d.event.start),
+      )
+      .attr('height', yScale.bandwidth())
+      .style('fill', (d) => d.event.color || 'steelblue')
+      .on('mouseenter', handleMouseEnter)
+      .on('mouseleave', handleMouseOut)
+      .on('mouseup', handleClick)
+
+    // Create rects
     eventRects
       .enter()
       .append('rect')
@@ -91,10 +111,11 @@ export const Chart: React.FC<Props> = ({
       .on('mouseleave', handleMouseOut)
       .on('mouseup', handleClick)
 
+    // Rects animation
     eventRects
       .transition()
       .duration(200) // Set the duration of the animation
-      .delay((d, i) => i * 5) // Add a delay for staggered animation
+      .delay((_d, i) => i * 5) // Add a delay for staggered animation
       .attr('y', (d) => yScale(d.resource.id) || 0)
 
     function handleClick(d: any) {
@@ -106,12 +127,12 @@ export const Chart: React.FC<Props> = ({
     }
 
     function handleMouseEnter(d: any) {
-      d3.select(d.currentTarget).style(
+      select(d.currentTarget).style(
         'box-shadow',
         '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
       )
       if (showTooltip) {
-        const tooltip = d3.select(tooltipRef.current)
+        const tooltip = select(tooltipRef.current)
         const data = d.target.__data__ as ClickData
         const resource = data.resource
         const event = data.event as Event
@@ -120,7 +141,7 @@ export const Chart: React.FC<Props> = ({
           const tooltipContent = `
               <strong>${resource?.label ?? ''}</strong><br>
               ${event.title}<br>
-              ${formatDate(event.start)} - ${formatDate(
+              ${getDayMonth(event.start)} - ${getDayMonth(
             event.end || event.start,
           )}
             `
@@ -135,17 +156,9 @@ export const Chart: React.FC<Props> = ({
     }
 
     function handleMouseOut(d: any) {
-      d3.select(d.currentTarget).style('box-shadow', '0')
+      select(d.currentTarget).style('box-shadow', '0')
 
-      d3.select(tooltipRef.current).style('opacity', 0)
-    }
-
-    // Helper function to format date as "MM/DD/YYYY"
-    function formatDate(date: Date) {
-      const month = date.getMonth() + 1
-      const day = date.getDate()
-      const year = date.getFullYear()
-      return `${month}/${day}/${year}`
+      select(tooltipRef.current).style('opacity', 0)
     }
   }, [data, monthYear])
 
