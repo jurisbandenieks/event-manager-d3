@@ -14,7 +14,7 @@ const eventTypeLib = [
 export const generateResources = (): Resource[] => {
   const resources: Resource[] = []
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 95; i++) {
     const resource: Resource = {
       id: i.toString(),
       title: `Resource ${i}`,
