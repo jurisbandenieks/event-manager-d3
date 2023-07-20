@@ -29,7 +29,12 @@ export const EventManager: React.FC<Props> = ({
         <Actions monthYear={monthYear} onUpdate={updateDate} />
       </div>
 
-      <Chart data={data} showTooltip={showTooltip} monthYear={monthYear} />
+      <Chart
+        data={data}
+        showTooltip={showTooltip}
+        monthYear={monthYear}
+        onClick={onClick}
+      />
 
       <div className={styles.footer}>
         {showLegend && <Legend resources={data} />}

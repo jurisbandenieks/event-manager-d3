@@ -8,9 +8,15 @@ type Props = {
   data: Resource[]
   monthYear: MonthYear
   showTooltip: boolean
+  onClick: (data: ClickData) => void
 }
 
-export const Chart: React.FC<Props> = ({ data, showTooltip, monthYear }) => {
+export const Chart: React.FC<Props> = ({
+  data,
+  showTooltip,
+  monthYear,
+  onClick,
+}) => {
   const chartRef = useRef<SVGSVGElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
 
@@ -83,12 +89,21 @@ export const Chart: React.FC<Props> = ({ data, showTooltip, monthYear }) => {
       .style('fill', (d) => d.event.color || 'steelblue')
       .on('mouseenter', handleMouseEnter)
       .on('mouseleave', handleMouseOut)
+      .on('mouseup', handleClick)
 
     eventRects
       .transition()
       .duration(200) // Set the duration of the animation
       .delay((d, i) => i * 5) // Add a delay for staggered animation
       .attr('y', (d) => yScale(d.resource.id) || 0)
+
+    function handleClick(d: any) {
+      const data = d.target.__data__ as ClickData
+      const resource = data.resource
+      const event = data.event as Event
+
+      onClick({ resource, event })
+    }
 
     function handleMouseEnter(d: any) {
       d3.select(d.currentTarget).style(
