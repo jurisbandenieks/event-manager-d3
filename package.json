@@ -1,13 +1,50 @@
 {
-  "name": "event-manager-d3",
-  "private": true,
+  "name": "@event-manager/react-d3",
+  "description": "Event manager component for react with d3",
+  "author": "Juris Bandenieks",
+  "email": "bandenieks.juris@gmail.com",
+  "url": "juris.band",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "timeline",
+    "events",
+    "calendar",
+    "d3"
+  ],
+  "bugs": {
+    "url": "https://github.com/jurisbandenieks/event-manager-d3/issues"
+  },
+  "private": false,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/event-manager.umd.js",
+  "module": "./dist/event-manager.es.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/event-manager.es.js",
+      "require": "./dist/event-manager.umd.js"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurisbandenieks/event-manager-d3.git"
   },
   "peerDependencies": {
     "react": ">=16",
