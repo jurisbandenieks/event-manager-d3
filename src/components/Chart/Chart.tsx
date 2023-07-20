@@ -1,21 +1,25 @@
 import React, { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
-import { ClickData, Event, Resource } from '../..'
+import { ClickData, Event, MonthYear, Resource } from '../..'
 import styles from './styles.module.scss'
 import { useResourcesByEventTypes } from '../../hooks'
 
 type Props = {
   data: Resource[]
+  monthYear: MonthYear
   showTooltip: boolean
 }
 
-export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
+export const Chart: React.FC<Props> = ({ data, showTooltip, monthYear }) => {
   const chartRef = useRef<SVGSVGElement | null>(null)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
 
   const resourcesByEventTypes = useResourcesByEventTypes(data)
 
   useEffect(() => {
+    const firstDay = new Date(monthYear.year, monthYear.month - 1, 1)
+    const lastDay = new Date(monthYear.year, monthYear.month, 0)
+
     const width = chartRef.current?.parentElement?.clientWidth || 800
     const height = 400
     const margin = { top: 10, right: 100, bottom: 30, left: 100 }
@@ -27,7 +31,7 @@ export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
 
     const xScale = d3
       .scaleTime()
-      .domain([new Date(2023, 6, 1), new Date(2023, 6, 31)]) // Customize the date range
+      .domain([firstDay, lastDay]) // Customize the date range
       .range([margin.left, width - margin.right])
 
     const yScale = d3
@@ -37,6 +41,7 @@ export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
       .padding(0.2)
 
     const xAxis = d3.axisBottom(xScale)
+
     svg
       .append('g')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
@@ -55,13 +60,16 @@ export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
       .call(yAxis)
 
     // Select all event rectangles
-    const eventRects = svg
-      .selectAll(`.${styles.eventRect}`)
-      .data(
-        resourcesByEventTypes.flatMap((resource) => {
-          return resource.events.map((event) => ({ resource, event }))
-        }),
-      )
+    const eventRects = svg.selectAll(`.${styles.eventRect}`).data(
+      resourcesByEventTypes.flatMap((resource) => {
+        return resource.events.map((event) => ({ resource, event }))
+      }),
+    )
+
+    // Remove the old event rectangles that are no longer needed
+    eventRects.exit().remove()
+
+    eventRects
       .enter()
       .append('rect')
       .attr('class', styles.eventRect)
@@ -124,12 +132,12 @@ export const Chart: React.FC<Props> = ({ data, showTooltip }) => {
       const year = date.getFullYear()
       return `${month}/${day}/${year}`
     }
-  }, [data])
+  }, [data, monthYear])
 
   return (
-    <>
+    <div className={styles.container}>
       <svg ref={chartRef}></svg>
       <div ref={tooltipRef} className={styles.tooltip}></div>
-    </>
+    </div>
   )
 }

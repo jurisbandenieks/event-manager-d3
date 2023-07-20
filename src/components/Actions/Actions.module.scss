@@ -1,0 +1,37 @@
+@import '../../sass/main.scss';
+
+.timelineActions {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+
+  & *:not(:last-child) {
+    margin-right: 12px;
+  }
+
+  @include respond(tab-port) {
+    margin: 12px 0 0 0;
+  }
+}
+
+.btn {
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+  outline: none;
+
+  &:hover {
+    background-color: $color-grey-light-1;
+  }
+}
