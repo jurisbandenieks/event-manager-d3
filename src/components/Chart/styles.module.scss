@@ -1,3 +1,5 @@
+@import '../../sass/main.scss';
+
 .container {
   margin: 24px 12px;
 }
@@ -8,12 +10,27 @@
   cursor: pointer;
 }
 
+.axis {
+  font-size: 12px;
+  text-align: left;
+
+  &X text {
+    transform: rotate(-45deg) translateY(25px);
+  }
+
+  path {
+    stroke: $color-grey-light-1;
+    stroke-width: 2px;
+  }
+}
+
 .tooltip {
   position: absolute;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  background-color: $color-grey-dark-3;
+  color: $color-white;
   padding: 8px;
   font-size: 12px;
   opacity: 0;
+  border-radius: 2px;
 }

@@ -20,15 +20,14 @@ export const Chart: React.FC<Props> = ({
   const tooltipRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    console.log(data)
     const firstDay = new Date(monthYear.year, monthYear.month - 1, 1)
     const lastDay = new Date(monthYear.year, monthYear.month, 0)
 
     const width = chartRef.current?.parentElement?.clientWidth || 800
     const height = 400
-    const margin = { top: 10, right: 100, bottom: 30, left: 100 }
+    const margin = { top: 10, right: 10, bottom: 50, left: 80 }
 
-    select(chartRef.current).selectAll('g.axis').remove()
+    select(chartRef.current).selectAll(`g.${styles.axis}`).remove()
 
     // Canvas
     const svg = select(chartRef.current)
@@ -44,7 +43,7 @@ export const Chart: React.FC<Props> = ({
 
     svg
       .append('g')
-      .attr('class', 'axis')
+      .attr('class', `${styles.axis} ${styles.axisX}`)
       .attr('transform', `translate(0, ${height - margin.bottom})`)
       .call(xAxis)
 
@@ -64,7 +63,7 @@ export const Chart: React.FC<Props> = ({
 
     svg
       .append('g')
-      .attr('class', 'axis')
+      .attr('class', styles.axis)
       .attr('transform', `translate(${margin.left}, 0)`)
 
       .call(yAxis)
@@ -142,8 +141,8 @@ export const Chart: React.FC<Props> = ({
               <strong>${resource?.label ?? ''}</strong><br>
               ${event.title}<br>
               ${getDayMonth(event.start)} - ${getDayMonth(
-            event.end || event.start,
-          )}
+                event.end || event.start,
+              )}
             `
 
           tooltip

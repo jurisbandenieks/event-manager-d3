@@ -8,7 +8,7 @@ const eventTypeLib = [
   { label: 'Sick Day', color: '#EF5350' },
   { label: 'Personal Day', color: '#26A69A' },
   { label: 'Anuall leave', color: '#FFA726' },
-  { label: 'Orher', color: '#42A5F5' },
+  { label: 'Other', color: '#42A5F5' },
 ]
 
 export const generateResources = (): Resource[] => {
