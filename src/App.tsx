@@ -41,7 +41,7 @@ function App() {
   }
 
   const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
+    _event: React.ChangeEvent<unknown>,
     newPage: number,
   ) => {
     setPage({ ...page, current: newPage })
