@@ -10,7 +10,7 @@ View and manage resources on a timeline
 
 `import { EventManager } from '@event-manager/react-d3'`
 
-![alt text](https://github.com/jurisbandenieks/event-manager-d3/blob/HEAD/images/event-manager.png)
+![alt text](https://github.com/jurisbandenieks/event-manager-d3/blob/HEAD/images/event-manager-d3.png)
 
 - This component provides tools for firing events but does not handle data processing.
 - It is the responsibility of the user to determine how to interact with the data during these events.
