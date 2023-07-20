@@ -9,13 +9,14 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "dependencies": {
+  "peerDependencies": {
+    "react": ">=16",
     "@types/d3": "^7.4.0",
-    "d3": "^7.8.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "d3": "^7.8.5"
   },
   "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
