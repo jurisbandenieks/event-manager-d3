@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { MonthYear, Props, formatMonthYear, getYearAndMonth } from '../..'
 import styles from './styles.module.scss'
-import { Chart } from '../Chart'
-import { Legend } from '../Legend'
-import { Actions } from '../Actions'
+import { Chart, Legend, Actions, Loading } from '../'
 import { useResourcesByEventTypes } from '../../hooks'
 
 export const EventManager: React.FC<Props> = ({
@@ -12,6 +10,7 @@ export const EventManager: React.FC<Props> = ({
   showTooltip = false,
   pagination = null,
   search = null,
+  loading = false,
   onClick,
   onUpdateDate,
 }) => {
@@ -32,12 +31,16 @@ export const EventManager: React.FC<Props> = ({
         <Actions monthYear={monthYear} onUpdate={updateDate} />
       </div>
 
-      <Chart
-        data={resourcesByEventTypes}
-        showTooltip={showTooltip}
-        monthYear={monthYear}
-        onClick={onClick}
-      />
+      {loading ? (
+        <Loading />
+      ) : (
+        <Chart
+          data={resourcesByEventTypes}
+          showTooltip={showTooltip}
+          monthYear={monthYear}
+          onClick={onClick}
+        />
+      )}
 
       <div className={styles.footer}>
         {showLegend && <Legend resources={data} />}
