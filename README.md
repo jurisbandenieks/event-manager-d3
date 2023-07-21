@@ -102,9 +102,6 @@ handleUpdateDate(data: MonthYear) => void
 ```
 Props = {
   resources: Resource[]
-  tableId: ID
-  hasWeekends?: boolean // default false
-  flat?: boolean // default false
   showLegend?: boolean // default false
   showTooltip?: boolean // default false
   loading?: boolean // default false

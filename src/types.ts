@@ -37,7 +37,6 @@ export type Page = {
 
 export type Props = {
   data: Resource[]
-  flat?: boolean // default false
   showLegend?: boolean // default false
   showTooltip?: boolean // default false
   loading?: boolean // default false
