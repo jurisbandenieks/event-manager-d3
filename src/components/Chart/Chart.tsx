@@ -63,7 +63,7 @@ export const Chart: React.FC<Props> = ({
 
     svg
       .append('g')
-      .attr('class', styles.axis)
+      .attr('class', `${styles.axis} ${styles.axisY}`)
       .attr('transform', `translate(${margin.left}, 0)`)
 
       .call(yAxis)

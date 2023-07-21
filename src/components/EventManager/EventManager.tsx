@@ -28,24 +28,29 @@ export const EventManager: React.FC<Props> = ({
       <div className={styles.timelineHeadline}>
         {search}
         <div className={styles.monthYear}>{formatMonthYear(monthYear)}</div>
-        <Actions monthYear={monthYear} onUpdate={updateDate} />
+        <Actions
+          disabled={loading}
+          monthYear={monthYear}
+          onUpdate={updateDate}
+        />
       </div>
 
       {loading ? (
         <Loading />
       ) : (
-        <Chart
-          data={resourcesByEventTypes}
-          showTooltip={showTooltip}
-          monthYear={monthYear}
-          onClick={onClick}
-        />
+        <>
+          <Chart
+            data={resourcesByEventTypes}
+            showTooltip={showTooltip}
+            monthYear={monthYear}
+            onClick={onClick}
+          />
+          <div className={styles.footer}>
+            {showLegend && <Legend resources={data} />}
+            {pagination}
+          </div>
+        </>
       )}
-
-      <div className={styles.footer}>
-        {showLegend && <Legend resources={data} />}
-        {pagination}
-      </div>
     </div>
   )
 }

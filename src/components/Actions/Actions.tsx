@@ -7,10 +7,11 @@ import next from '../../assets/navigate_next.svg'
 
 type Props = {
   monthYear: MonthYear
+  disabled: boolean
   onUpdate: (date: MonthYear) => void
 }
 
-export const Actions: React.FC<Props> = ({ monthYear, onUpdate }) => {
+export const Actions: React.FC<Props> = ({ monthYear, disabled, onUpdate }) => {
   const handleBack = () => {
     let date
     if (monthYear.month <= 1) {
@@ -37,13 +38,17 @@ export const Actions: React.FC<Props> = ({ monthYear, onUpdate }) => {
 
   return (
     <div className={styles.timelineActions}>
-      <button className={styles.btn} onClick={handleBack}>
+      <button className={styles.btn} disabled={disabled} onClick={handleBack}>
         <img src={back} alt='<' />
       </button>
-      <button className={styles.btn} onClick={handleToday}>
+      <button className={styles.btn} disabled={disabled} onClick={handleToday}>
         Today
       </button>
-      <button className={styles.btn} onClick={handleForward}>
+      <button
+        className={styles.btn}
+        disabled={disabled}
+        onClick={handleForward}
+      >
         <img src={next} alt='<' />
       </button>
     </div>

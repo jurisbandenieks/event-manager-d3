@@ -18,6 +18,10 @@
     transform: rotate(-45deg) translateY(25px);
   }
 
+  &Y text {
+    transform: translate(-10px);
+  }
+
   path {
     stroke: $color-grey-light-1;
     stroke-width: 2px;
