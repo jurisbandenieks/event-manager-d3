@@ -47,9 +47,12 @@
     "url": "git+https://github.com/jurisbandenieks/event-manager-d3.git"
   },
   "peerDependencies": {
-    "@types/d3": "^7.4.0",
-    "d3": "^7.8.5",
     "react": ">=16"
+  },
+  "dependencies": {
+    "@event-manager/react-d3": "^0.0.1",
+    "@types/d3": "^7.4.0",
+    "d3": "^7.8.5"
   },
   "devDependencies": {
     "@emotion/react": "^11.11.1",
