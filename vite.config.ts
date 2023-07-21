@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import dts from 'vite-plugin-dts'
 import libCss from 'vite-plugin-libcss'
 import sassDts from 'vite-plugin-sass-dts'
+import svgr from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
     }),
     libCss(),
     sassDts(),
+    svgr(),
   ],
   build: {
     outDir: 'dist',
