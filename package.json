@@ -16,7 +16,7 @@
     "url": "https://github.com/jurisbandenieks/event-manager-d3/issues"
   },
   "private": false,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "main": "./dist/event-manager.umd.js",
   "module": "./dist/event-manager.es.js",
